@@ -6001,7 +6001,20 @@ RtmpIoctl_rt_ioctl_siwfreq(
 
     if (ChannelSanity(pAd, chan) == TRUE)
     {
-	pAd->CommonCfg.Channel = chan;
+	
+        pAd->CommonCfg.Channel = chan;
+
+        {
+            UCHAR rf_channel, rf_bw;
+            INT ext_ch;
+            /* 20MHz */
+            rf_bw = BW_20;
+            ext_ch = EXTCHA_NONE;
+            rf_channel = pAd->CommonCfg.Channel;
+            
+            AsicSetChannel(pAd, rf_channel, rf_bw, ext_ch, FALSE);
+        }
+
 		/* Save the channel on MlmeAux for CntlOidRTBssidProc used. */
 		pAd->MlmeAux.Channel = pAd->CommonCfg.Channel;
 		/*save connect info*/
