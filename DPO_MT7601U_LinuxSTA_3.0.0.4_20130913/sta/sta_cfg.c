@@ -931,7 +931,8 @@ INT Set_NetworkType_Proc(
 		/* disable all periodic state machine */
 		pAd->StaCfg.bAutoReconnect = FALSE;
 		/* reset all mlme state machine */
-		RTMP_MLME_RESET_STATE_MACHINE(pAd);
+		//RTMP_MLME_RESET_STATE_MACHINE(pAd);
+        MlmeRestartStateMachine(pAd);
 		DBGPRINT(RT_DEBUG_TRACE, ("fOP_STATUS_MEDIA_STATE_CONNECTED \n"));
 		if (pAd->CommonCfg.CentralChannel == 0)
 		{
