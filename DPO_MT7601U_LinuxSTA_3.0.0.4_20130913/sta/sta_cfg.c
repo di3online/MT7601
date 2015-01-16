@@ -6004,7 +6004,7 @@ RtmpIoctl_rt_ioctl_siwfreq(
 	
         pAd->CommonCfg.Channel = chan;
 
-        {
+        if (MONITOR_ON(pAd)) {
             UCHAR rf_channel, rf_bw;
             INT ext_ch;
             /* 20MHz */
