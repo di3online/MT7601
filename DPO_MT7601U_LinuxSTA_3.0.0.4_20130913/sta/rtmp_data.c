@@ -1596,11 +1596,7 @@ if (0){
 		if (pRxWI->RxWIMPDUByteCnt < 14)
 		{
 			Status = NDIS_STATUS_FAILURE;
-			if (MONITOR_ON(pAd)) {
-                //continue;
-            } else {
-                continue;
-            }
+            continue;
 		}
 
 		if (MONITOR_ON(pAd))

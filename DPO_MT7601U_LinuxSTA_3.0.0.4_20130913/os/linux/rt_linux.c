@@ -494,9 +494,9 @@ PNDIS_PACKET duplicate_pkt(
 		MEM_DBG_PKT_ALLOC_INC(skb);
 
 		skb_reserve(skb, 2);
-		NdisMoveMemory(skb->tail, pHeader802_3, HdrLen);
+		NdisMoveMemory(GET_OS_PKT_DATATAIL(skb), pHeader802_3, HdrLen);
 		skb_put(skb, HdrLen);
-		NdisMoveMemory(skb->tail, pData, DataSize);
+		NdisMoveMemory(GET_OS_PKT_DATATAIL(skb), pData, DataSize);
 		skb_put(skb, DataSize);
 		skb->dev = pNetDev;	/*get_netdev_from_bssid(pAd, FromWhichBSSID); */
 		pPacket = OSPKT_TO_RTPKT(skb);
@@ -647,7 +647,7 @@ PNDIS_PACKET ClonePacket(
 		pClonedPkt->dev = pRxPkt->dev;
 		pClonedPkt->data = pData;
 		pClonedPkt->len = DataSize;
-		pClonedPkt->tail = pClonedPkt->data + pClonedPkt->len;
+		SET_OS_PKT_DATATAIL(pClonedPkt, pClonedPkt->data, pClonedPkt->len);
 		ASSERT(DataSize < 1530);
 	}
 	return pClonedPkt;
@@ -692,7 +692,7 @@ void wlan_802_11_to_802_3_packet(
 	pOSPkt->dev = pNetDev;
 	pOSPkt->data = pData;
 	pOSPkt->len = DataSize;
-	pOSPkt->tail = pOSPkt->data + pOSPkt->len;
+	SET_OS_PKT_DATATAIL(pOSPkt, pOSPkt->data, pOSPkt->len);
 
 	/* copy 802.3 header */
 
@@ -1117,9 +1117,12 @@ static inline void __RtmpOSFSInfoChange(OS_FS_INFO * pOSFSInfo, BOOLEAN bSet)
 		pOSFSInfo->fsuid = current->fsuid;
 		pOSFSInfo->fsgid = current->fsgid;
 		current->fsuid = current->fsgid = 0;
+#elif LINUX_VERSION_CODE < KERNEL_VERSION(3,12,0)
+        pOSFSInfo->fsuid = current_fsuid();
+        pOSFSInfo->fsgid = current_fsgid();           
 #else
-		pOSFSInfo->fsuid = current_fsuid();
-		pOSFSInfo->fsgid = current_fsgid();
+		pOSFSInfo->fsuid = current_fsuid().val;
+		pOSFSInfo->fsgid = current_fsgid().val;
 #endif
 		pOSFSInfo->fs = get_fs();
 		set_fs(KERNEL_DS);

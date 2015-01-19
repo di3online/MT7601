@@ -665,7 +665,9 @@ VOID RTMPDrvOpen(
 	{
 	UINT32 reg = 0;
 	RTMP_IO_READ32(pAd, 0x1300, &reg);  /* clear garbage interrupts*/
-	printk("0x1300 = %08x\n", reg);
+#ifdef DBG
+    printk("0x1300 = %08x\n", reg);
+#endif /* DBG */
 	}
 
 	{
