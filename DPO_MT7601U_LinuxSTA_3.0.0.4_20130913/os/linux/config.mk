@@ -954,6 +954,11 @@ WFLAGS += -DRT_BIG_ENDIAN
 EXTRA_CFLAGS := $(WFLAGS) -I$(RT28xx_DIR)/include
 endif
 
+ifeq ($(PLATFORM),HI3518C)
+EXTRA_CFLAGS := -D__KERNEL__ -DMODULE=1 -I$(LINUX_SRC)/include -Wall -Wstrict-prototypes -Wno-trigraphs -O2 -fno-strict-aliasing -fno-common -fomit-frame-pointer -fno-pic -pipe -finline-limit=100000 $(WFLAGS)
+export EXTRA_CFLAGS
+endif
+
 ifeq ($(PLATFORM),ST)
 #WFLAGS += -DST
 WFLAGS += -DST
