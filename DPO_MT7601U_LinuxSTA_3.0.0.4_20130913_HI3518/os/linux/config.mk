@@ -290,7 +290,7 @@ endif
 # config for STA mode
 
 ifeq ($(RT28xx_MODE),STA)
-WFLAGS += -DCONFIG_STA_SUPPORT -DSCAN_SUPPORT -DDBG
+WFLAGS += -DCONFIG_STA_SUPPORT -DSCAN_SUPPORT #-DDBG
 
 ifeq ($(HAS_XLINK),y)
 WFLAGS += -DXLINK_SUPPORT
@@ -952,6 +952,11 @@ ifeq ($(PLATFORM),FREESCALE8377)
 #export EXTRA_CFLAGS
 WFLAGS += -DRT_BIG_ENDIAN
 EXTRA_CFLAGS := $(WFLAGS) -I$(RT28xx_DIR)/include
+endif
+
+ifeq ($(PLATFORM),HI3518C)
+EXTRA_CFLAGS := -D__KERNEL__ -DMODULE=1 -I$(LINUX_SRC)/include -Wall -Wstrict-prototypes -Wno-trigraphs -O2 -fno-strict-aliasing -fno-common -fomit-frame-pointer -fno-pic -pipe -finline-limit=100000 $(WFLAGS)
+export EXTRA_CFLAGS
 endif
 
 ifeq ($(PLATFORM),ST)
